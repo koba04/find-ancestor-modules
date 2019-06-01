@@ -1,0 +1,39 @@
+{
+  "name": "find-ancestor-modules",
+  "version": "1.0.0",
+  "description": "Find all ancestor ES Modules in projects",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint --ext .ts src",
+    "test": "mocha --require ts-node/register '**/__tests__/*.test.ts'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/koba04/find-ancestor-modules.git"
+  },
+  "keywords": [
+    "esmodules",
+    "typescript"
+  ],
+  "author": "koba04",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/koba04/find-ancestor-modules/issues"
+  },
+  "homepage": "https://github.com/koba04/find-ancestor-modules#readme",
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "typescript": "^3.5.1"
+  },
+  "devDependencies": {
+    "@cybozu/eslint-config": "^4.0.1",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.0.4",
+    "eslint": "^5.16.0",
+    "mocha": "^6.1.4",
+    "prettier": "^1.17.1",
+    "ts-node": "^8.2.0"
+  }
+}
