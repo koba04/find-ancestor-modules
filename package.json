@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "Find all ancestor ES Modules in projects",
   "main": "index.js",
+  "bin": "bin/cli.js",
   "scripts": {
+    "start": "tsc -w",
     "lint": "eslint --ext .ts src",
-    "test": "mocha --require ts-node/register '**/__tests__/*.test.ts'"
+    "test": "mocha --require ts-node/register 'test/**/*.test.ts'"
   },
   "repository": {
     "type": "git",
