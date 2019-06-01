@@ -1,6 +1,11 @@
 # find-ancestor-modules
 
+[![CircleCI](https://circleci.com/gh/koba04/find-ancestor-modules.svg?style=shield)](https://circleci.com/gh/koba04/find-ancestor-modules)
+
 Find all ancestor ES Modules in projects
+
+<details>
+<summary>WIP</summary>
 
 ## Install
 
@@ -17,3 +22,5 @@ find-ancestor-modules src/target.ts --root src
   'b/bar.ts'
 ]
 ```
+
+</details>
