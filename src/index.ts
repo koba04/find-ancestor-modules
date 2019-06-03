@@ -1,22 +1,25 @@
 import ts from "typescript";
+import _glob from "glob";
+import util from "util";
+import fs from "fs";
 
-import { normalizePath } from "./util";
 import { getImporFiles } from "./ast";
 
-type DepsMap = Map<string, string[]>;
+const glob = util.promisify(_glob);
+const readFile = util.promisify(fs.readFile);
 
-export const parseFile = (entryFiles: string[]): DepsMap => {
-  const program = ts.createProgram({
-    rootNames: entryFiles,
-    options: {}
-  });
+// TODO: return all ts(x) files
+export const parseDir = async (dir: string): Promise<string[]> => {
+  return await glob(dir);
+};
 
-  return new Map(
-    program
-      .getSourceFiles()
-      .filter(sourceFile => !sourceFile.isDeclarationFile)
-      .map(sourceFile => {
-        return [normalizePath(sourceFile.fileName), getImporFiles(sourceFile)];
-      })
+export const parseFile = async (filePath: string): Promise<string[]> => {
+  const source = await readFile(filePath);
+  const sourceFile = ts.createSourceFile(
+    filePath,
+    source.toString(),
+    // TODO
+    ts.ScriptTarget.Latest
   );
+  return getImporFiles(sourceFile);
 };
