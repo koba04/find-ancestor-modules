@@ -10,7 +10,7 @@ const readFile = util.promisify(fs.readFile);
 
 // TODO: return all ts(x) files
 export const parseDir = async (dir: string): Promise<string[]> => {
-  return await glob(dir);
+  return glob(dir);
 };
 
 export const parseFile = async (filePath: string): Promise<string[]> => {

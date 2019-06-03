@@ -17,6 +17,9 @@
     "esmodules",
     "typescript"
   ],
+  "engines": {
+    "node": ">=8"
+  },
   "author": "koba04",
   "license": "MIT",
   "bugs": {
