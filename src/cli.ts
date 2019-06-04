@@ -21,11 +21,9 @@ export async function run() {
       }
     }
   );
-  const depsMap = await parse(cli.flags.root, cli.flags.target);
-  console.log(cli.flags.target);
-  console.log("===============");
+  const { root, target } = cli.flags;
+  const depsMap = await parse(root, target);
   depsMap.forEach(dep => {
     console.log(dep);
   });
-  console.log("===============");
 }

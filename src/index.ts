@@ -5,7 +5,7 @@ import fs from "fs";
 
 import path from "path";
 import { getImporFiles } from "./ast";
-import { normalizePath } from "../lib/util";
+import { normalizePath } from "./util";
 
 const glob = util.promisify(_glob);
 const readFile = util.promisify(fs.readFile);
@@ -14,22 +14,39 @@ export const parse = async (
   rootDir: string,
   target: string
 ): Promise<string[]> => {
-  console.log(target, path.resolve(rootDir));
-  const files = await parseDir(path.resolve(rootDir) + "/**/*.ts");
+  const files = await parseDir(rootDir);
   const results = await Promise.all(files.map(async file => parseFile(file)));
-  const depsMap = new Map();
-  results.forEach(([filePath, imports]) => {
-    imports.forEach(i => {
-      const deps = depsMap.get(i) || [];
-      depsMap.set(i, [...deps, normalizePath(filePath)]);
+  return parseDependencies(target, results);
+};
+
+type Deps = [string, string[]];
+
+export const parseDependencies = (target: string, deps: Deps[]): string[] => {
+  const calcDeps: string[] = [];
+  const parentDeps = new Map();
+  deps.forEach(([file, children]) => {
+    children.forEach(child => {
+      const d = parentDeps.get(child) || [];
+      parentDeps.set(child, [...d, file]);
     });
   });
-  return depsMap.get(target);
+  // console.log(parentDeps);
+  let current;
+  const targets = parentDeps.get(target);
+  while ((current = targets.shift())) {
+    targets.push(
+      ...(parentDeps.get(current) || []).filter(
+        (e: string) => calcDeps.indexOf(e) === -1
+      )
+    );
+    calcDeps.push(current);
+  }
+  return calcDeps;
 };
 
 // TODO: return all ts(x) files
 export const parseDir = async (dir: string): Promise<string[]> => {
-  return glob(dir);
+  return glob(dir + "/**/*.ts");
 };
 
 export const parseFile = async (
@@ -42,5 +59,5 @@ export const parseFile = async (
     // TODO
     ts.ScriptTarget.Latest
   );
-  return [filePath, getImporFiles(sourceFile)];
+  return [normalizePath(filePath), getImporFiles(sourceFile)];
 };
